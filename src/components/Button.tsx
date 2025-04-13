@@ -1,4 +1,11 @@
-export default function Button({text} : {text: string}) {
+'use client'
+
+interface ButtonProps {
+    text: string,
+    onClick: () => {}
+}
+
+export default function Button({text, onClick} : ButtonProps) {
     const textFormat = "text-center text-white font-bold";
     const padding = "px-5 py-2";
     const effects = "hover:brightness-110 active:brightness-120";
@@ -7,7 +14,7 @@ export default function Button({text} : {text: string}) {
     const style = `${baseButton} ${padding} ${textFormat} ${effects}`
 
     return (
-        <button className={style}>
+        <button className={style} onClick={onClick}>
             {text}
         </button>
     )
