@@ -2,6 +2,7 @@
 
 import Button from "@/components/Button";
 import RepoResultCard from "@/components/RepoResultCard";
+import Loader from "@/components/Loader";
 import { searchRepo, SearchResponse } from "@/services/github-service";
 import { useState } from 'react';
 
@@ -9,15 +10,19 @@ export default function Home() {
   const [keyword, setKeyword] = useState('');
   const [results, setResults] = useState<SearchResponse[]>([]);
   const [hasResults, setHasResults] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
  
   async function getResults() {
+    setIsLoading(true);
     const res = await searchRepo(keyword);
     if (res === null) {
       setHasResults(true);
+      setIsLoading(false);
       return setResults([])
     };
     setHasResults(res.items.length > 0);
     setResults(res.items);
+    setIsLoading(false);
   }
 
   function handleKeyPress(e:any) {
@@ -27,6 +32,7 @@ export default function Home() {
   return (
     <div className="items-center justify-items-center p-20">
       <div className="w-1/2">
+        {/* inputとボタン */}
         <div className="mb-20 flex gap-4">
           <input 
             className="rounded-md bg-white p-2 flex-grow" 
@@ -34,6 +40,8 @@ export default function Home() {
             onKeyDown={e => handleKeyPress(e)}/>
           <Button text="検索" onClick={() => getResults()}/>
         </div>
+        
+        {/* 結果 */}
         {hasResults && results.map((item, index) => {
           return (
             <div className="mb-5" key={index}>
@@ -45,8 +53,11 @@ export default function Home() {
           )
         })}
         {!hasResults && (
-          <p className="text-white font-bold">検索結果がなし</p>
+          <p className="text-white font-bold text-center">検索結果がなし</p>
         )}
+
+        {/* ローディング中 */}
+        {isLoading && <Loader/>}
       </div>
     </div>
   );
