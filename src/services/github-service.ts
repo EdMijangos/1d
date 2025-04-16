@@ -12,11 +12,13 @@ export interface SearchResponse {
 }
 
 
-export async function searchRepo(keyword: string) {
+export async function searchRepo(keyword: string, page = 1) {
     if (keyword === '') return null;
+    const query = encodeURIComponent(keyword);
+    const pageSize = 10;
 
     try {
-        const res = await fetch(`https://api.github.com/search/repositories?q=${keyword}`);
+        const res = await fetch(`https://api.github.com/search/repositories?q=${query}&per_page=${pageSize}&page=${page}`);
         if (!res.ok) throw new Error(res.statusText);
         return await res.json();
     } catch (error) {
