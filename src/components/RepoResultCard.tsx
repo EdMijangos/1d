@@ -1,5 +1,4 @@
 import Image from "next/image";
-import fallbackImage from "../../../../public/next.svg"
 
 interface RepoResultCardProps {
     avatar: string,
@@ -8,7 +7,7 @@ interface RepoResultCardProps {
 }
 
 export default function RepoResultCard({avatar, repoName, onClick} : RepoResultCardProps) {
-    const imgUrl = avatar?.trim() ? avatar : fallbackImage;
+    const imgUrl = avatar?.trim() ? avatar : '/next.svg';
 
     return (
         <div 

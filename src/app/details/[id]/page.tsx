@@ -1,7 +1,6 @@
 'use client';
 
 import Image from "next/image";
-import fallbackImage from "../../../../public/next.svg"
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from "react";
 import { SearchResponse, getRepo } from "@/services/github-service";
@@ -11,6 +10,7 @@ export default function Details() {
   const {id} = useParams<{ id: string }>()
   const [data, setData] = useState<SearchResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const fallbackImage = '/next.svg';
   const countersRenderDic: {title: string, prop: keyof SearchResponse}[] = [
     {title: 'Star数', prop: 'stargazers_count'},
     {title: 'Watcher数', prop: 'watchers_count'},
