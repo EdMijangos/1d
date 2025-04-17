@@ -4,7 +4,7 @@ import Button from "@/components/Button";
 import RepoResultCard from "@/components/RepoResultCard";
 import Loader from "@/components/Loader";
 import { searchRepo, SearchResponse } from "@/services/github-service";
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useInView } from "react-intersection-observer";
 import { useRouter } from 'next/navigation'
 
@@ -58,7 +58,7 @@ export default function Home() {
     }
   }
 
-  function handleKeyPress(e:any) {
+  function handleKeyPress(e:React.KeyboardEvent) {
     if (e.key === 'Enter') getResults();
   }
 
@@ -83,7 +83,7 @@ export default function Home() {
         {/* 結果 */}
         {hasResults && results.map((item, index) => {
           return (
-            <div className="mb-5" key={item.id}>
+            <div className="mb-5" key={index + item.id}>
               <RepoResultCard
                 avatar={item.owner.avatar_url}
                 repoName={item.name}
