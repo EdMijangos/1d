@@ -15,7 +15,7 @@ export default function Home() {
   const [results, setResults] = useState<SearchResponse[]>([]);
   const [hasResults, setHasResults] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const { ref, inView } = useInView();
+  const {ref, inView} = useInView();
 
   const router = useRouter();
  
@@ -36,9 +36,9 @@ export default function Home() {
       setHasResults(hasResults);
       setResults(res.items);
       window.sessionStorage.setItem('searchResults', hasResults ? JSON.stringify(res.items) : ""); //キャッシュ
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
+    } finally {
       setIsLoading(false);
     }
   }
@@ -51,9 +51,9 @@ export default function Home() {
       setResults(newResults);
       window.sessionStorage.setItem('searchResults', JSON.stringify(newResults)); //キャッシュ
       setCurrentPage(currentPage + 1);
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
+    } finally {
       setIsLoading(false);
     }
   }
@@ -83,7 +83,7 @@ export default function Home() {
         {/* 結果 */}
         {hasResults && results.map((item, index) => {
           return (
-            <div className="mb-5" key={index + item.id}>
+            <div className="mb-5" key={item.id}>
               <RepoResultCard
                 avatar={item.owner.avatar_url}
                 repoName={item.name}
