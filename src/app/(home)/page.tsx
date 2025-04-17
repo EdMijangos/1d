@@ -6,6 +6,7 @@ import Loader from "@/components/Loader";
 import { searchRepo, SearchResponse } from "@/services/github-service";
 import { useEffect, useState } from 'react';
 import { useInView } from "react-intersection-observer";
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
   const [input, setInput] = useState('');
@@ -14,8 +15,9 @@ export default function Home() {
   const [results, setResults] = useState<SearchResponse[]>([]);
   const [hasResults, setHasResults] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const { ref, inView } = useInView();
 
-  const { ref, inView } = useInView()
+  const router = useRouter();
  
   async function getResults() {
     setIsLoading(true);
@@ -30,8 +32,10 @@ export default function Home() {
         setIsLoading(false);
         return setResults([])
       };
-      setHasResults(res.items?.length > 0);
+      const hasResults = res.items?.length > 0
+      setHasResults(hasResults);
       setResults(res.items);
+      window.sessionStorage.setItem('searchResults', hasResults ? JSON.stringify(res.items) : ""); //キャッシュ
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -43,7 +47,9 @@ export default function Home() {
     setIsLoading(true);
     try {
       const res = await searchRepo(keyword, currentPage + 1);
-      setResults([...results, ...res?.items])
+      const newResults = [...results, ...res?.items]
+      setResults(newResults);
+      window.sessionStorage.setItem('searchResults', JSON.stringify(newResults)); //キャッシュ
       setCurrentPage(currentPage + 1);
       setIsLoading(false);
     } catch (error) {
@@ -68,7 +74,7 @@ export default function Home() {
         {/* inputとボタン */}
         <div className="mb-20 flex gap-4">
           <input 
-            className="rounded-md bg-white p-2 flex-grow" 
+            className="rounded-md bg-white text-black p-2 flex-grow" 
             onChange={val => setInput(val.target.value)}
             onKeyDown={e => handleKeyPress(e)}/>
           <Button text="検索" onClick={() => getResults()}/>
@@ -81,6 +87,7 @@ export default function Home() {
               <RepoResultCard
                 avatar={item.owner.avatar_url}
                 repoName={item.name}
+                onClick={() => router.push('details/' + item.id)}
               />
               {(index ===  results.length - 1) && <div ref={ref}></div>}
             </div>

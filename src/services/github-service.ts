@@ -11,7 +11,6 @@ export interface SearchResponse {
     }
 }
 
-
 export async function searchRepo(keyword: string, page = 1) {
     if (keyword === '') return null;
     const query = encodeURIComponent(keyword);
@@ -19,6 +18,18 @@ export async function searchRepo(keyword: string, page = 1) {
 
     try {
         const res = await fetch(`https://api.github.com/search/repositories?q=${query}&per_page=${pageSize}&page=${page}`);
+        if (!res.ok) throw new Error(res.statusText);
+        return await res.json();
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function getRepo(id: string) {
+    if (id === '') return;
+
+    try {
+        const res = await fetch(`https://api.github.com/repositories/${id}`);
         if (!res.ok) throw new Error(res.statusText);
         return await res.json();
     } catch (error) {

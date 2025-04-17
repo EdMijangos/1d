@@ -1,21 +1,27 @@
 import Image from "next/image";
+import fallbackImage from "../../../../public/next.svg"
 
 interface RepoResultCardProps {
     avatar: string,
-    repoName: string
+    repoName: string,
+    onClick: () => void
 }
 
-export default function RepoResultCard({avatar, repoName} : RepoResultCardProps) {
+export default function RepoResultCard({avatar, repoName, onClick} : RepoResultCardProps) {
+    const imgUrl = avatar?.trim() ? avatar : fallbackImage;
+
     return (
-        <div className="rounded-md cursor-pointer border border-[#3d444db3] p-6 flex items-center">
+        <div 
+            onClick={onClick}
+            className="rounded-md cursor-pointer border border-[#3d444db3] p-6 flex items-center">
             <Image
-                src={avatar}
+                src={imgUrl}
                 width={100}
                 height={100}
                 alt="ユーザーのアイコン"
                 className="rounded-full"
             />
-            <p className="ml-10 text-[#9198a1] font-bold">{repoName}</p>
+            <p className="ml-10 font-bold">{repoName}</p>
         </div>
     )
 }
