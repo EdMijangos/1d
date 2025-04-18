@@ -10,7 +10,7 @@
 - `Jest` はコードのテストに使用されました。
 - `react-intersection-observer`は項目が表示されているかどうかを認識し、無限スクロールを行うために使用されました。
 
-##　案件立ち上がり
+## 案件立ち上がり
 ```
 npm install
 npm run dev
