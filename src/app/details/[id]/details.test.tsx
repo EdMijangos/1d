@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import Details from './page';
 import * as SearchModule from '@/services/github-service';
 
@@ -21,7 +21,7 @@ const mockData = {
 }
 
 //検索関数のモック
-const searchSpy = jest.spyOn(SearchModule, 'getRepo').mockResolvedValue(mockData)
+jest.spyOn(SearchModule, 'getRepo').mockResolvedValue(mockData)
 
 describe('Details', () => {
     it('初期化を表示する', async () => {
